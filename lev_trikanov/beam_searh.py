@@ -1,41 +1,40 @@
-
+from utils import get_direction
 
 def beam_search_initialization(space):
-    for i in space.connection:
+    for key_main_point, seconds_points in space.connection.items():
         text = f"""
-                
-                connection(1st:2nd) {i} : {space.connection[i]}
-                components:         {space.nodes[i]} 
-
+                connection(1st:2nd) {key_main_point} : {seconds_points}
                """ 
         print(text)
-        start_A = space.nodes[i]
-        for el in space.connection[i]:
-            start_B = space.nodes[el]
-            beam_search(space, start_A, start_B)
+        start_A = (key_main_point.x, key_main_point.y)
+        for el in seconds_points:
+            start_B = (el.x, el.y)
+            print(start_A, start_B)
+            beam_search_result = beam_search(space, start_A, start_B)
+            space.paths[f'{key_main_point.pk} : {el.pk}'] = beam_search_result
     
-
 
 def beam_search(space, start_A, start_B):
-    path_a = []
-    path_b = []
-    Ax_current, Ay_current = start_A
-    Bx_current, By_current = start_B
-    
+    traversal = []
+    x_a, y_a = start_A
+    x_b, y_b = start_B
+    cur_direction, length = get_direction(x_a, y_a, x_b, y_b)
+
     while True:
-        if Ax_current == Bx_current and Ay_current == By_current:
-            print(path_a, path_b)
+        print(length)
+        print(cur_direction)
+        for i in range(0, length, 25):
+            x_a += cur_direction[0]
+            y_a += cur_direction[1]
+            if x_a == x_b and y_a == y_b:   
+                print(traversal)
+                       
+                return traversal
+            traversal.append((x_a, y_a))
+        cur_direction, length = get_direction(x_a, y_a, x_b, y_b)
+        print(traversal)
+        if x_a == x_b and y_a == y_b:
             break
-        elif Ax_current == start_B[0] and Ay_current == start_B[1] or Bx_current == start_A[0] or By_current == start_A[1]:
-            print(path_a, path_b)
-            break
-        else:
-            print(1)
-            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-                Ax_current += dx; Ay_current += dy
-                Bx_current += dx; By_current += dy
-                path_a.append((Ax_current, Ay_current))
-                path_b.append((Bx_current, By_current))
-                print(path_a, path_b)
+        input()
 
     

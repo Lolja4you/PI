@@ -27,7 +27,7 @@ def spin_rotation(x1, y1, x2, y2, angle, length=0):
 
 
 class DrawNode:
-    def __init__(self, canvas, x: int, y: int, color: str = 'silver', length: int = 0, angle: int = 0):
+    def __init__(self, canvas, x: int, y: int, color: str = 'silver', length: int = 0, angle: int = 0, pk:int =0):
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -36,6 +36,7 @@ class DrawNode:
         self.angle = angle
         self.__radius = 10
         self.__width = 3
+        self.pk = pk
 
     def draw(self):
         top_left_x = self.x - (self.__radius/2)
@@ -87,67 +88,10 @@ class DrawWire(DrawNode):
         super().move(dx, dy)
 
 
-class DrawResisrtor(DrawNode):
-    def __init__(self, canvas, x, y, color='#595959', length=0, angle=0):
-        super().__init__(canvas, x, y, color, length, angle)
-
-    def draw(self):
-        left_border = DrawWire(
-            self.canvas, 
-            x=self.x, y=self.y,
-            length=40, angle=90+self.angle, 
-            is_node_1=False, is_node_2=False, 
-            color=self.color
-        )
-        bottom_border = DrawWire(
-            self.canvas, 
-            x=self.x, y=self.y, 
-            length=100, angle=self.angle,
-            is_node_1=False, is_node_2=False, 
-            color=self.color
-        )
-
-        top_border = DrawWire(
-            self.canvas, 
-            left_border.x2, left_border.y2, 
-            length=100, angle=self.angle,
-            is_node_1=False, is_node_2=False, 
-            color=self.color
-        )
-        right_border = DrawWire(
-            self.canvas, 
-            bottom_border.x2, 
-            bottom_border.y2, 
-            length=40, angle=90+self.angle, 
-            is_node_1=False, is_node_2=False,
-            color=self.color
-        )
-        
-        left_border.draw()
-        bottom_border.draw()
-
-        top_border.draw()
-        right_border.draw()
-
-        left_conductor = DrawWire(
-            self.canvas, 
-            left_border.x1+(left_border.x2-left_border.x1)/2, 
-            left_border.y1+(left_border.y2-left_border.y1)/2, 
-            length=-50, angle=self.angle, 
-            is_node_1=False, is_node_2=True,
-            color=self.color
-        )
-        left_conductor.draw()
-
-        right_conductor = DrawWire(
-            self.canvas, 
-            right_border.x1+(right_border.x2-right_border.x1)/2, 
-            right_border.y1+(right_border.y2-right_border.y1)/2, 
-            length=50, angle=self.angle, 
-            is_node_1=False, is_node_2=True,
-            color=self.color
-        )
-        right_conductor.draw()
-    def move(self, dx, dy):
-        super().move(dx, dy)
+class UnkownComponents(DrawNode):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     
+    def draw(self):
+        self.canvas.create_rectangle(self.x, self.y, self.x+25, self.y+25, fill=self.color,outline="gray")
+        self.canvas.create_text(self.x+12.5, self.y+12.5, text=str(self.pk), fill="white")

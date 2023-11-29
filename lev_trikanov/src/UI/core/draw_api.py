@@ -1,16 +1,15 @@
-from .draw_classes import DrawNode, DrawWire, DrawResisrtor
-from main_class import space
+from .draw_classes import UnkownComponents
 
-
-components_dict = space.nodes
-
-def components_drawer(canvas, components_dict=components_dict):
+def components_drawer(canvas, components_dict):
     components = []
-    for component in components_dict:
-        x = components_dict[component][0] * 200 + 50
-        y = components_dict[component][1] * 200 - 80
-        length = 50
-        angle = 0
-        color = "black"
-        components.append(DrawResisrtor(canvas, x=x, y=y, length=length, angle=angle, color=color))
+    for key, component in components_dict.items():
+        try:
+            x = component.x
+            y = component.y
+            components.append(UnkownComponents(canvas, x=x, y=y, pk=component.pk, color='red'))
+        except AttributeError:
+            for i in component:
+                x = i[0]
+                y = i[1]
+                components.append(UnkownComponents(canvas, x=x, y=y, color='gray'))
     return components
