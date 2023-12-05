@@ -15,8 +15,8 @@ def beam_search_initialization(space):
     
 
 def beam_search(space, start_A, start_B):
-    traversal = []
-    x_a, y_a = start_A
+    traversal = [] #путь пройденных точек по ним мы восстановим путь [(25,0), (50, 0), (75, 0)]
+    x_a, y_a = start_A # x_a, y_a <= (x, y)
     x_b, y_b = start_B
     cur_direction, length = get_direction(x_a, y_a, x_b, y_b)
 
