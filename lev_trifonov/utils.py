@@ -35,17 +35,17 @@ def  get_direction(x_a, y_a, x_b, y_b) -> tuple:
     height = y_a - y_b
     
     if abs(length) < abs(height):
-        if height < 0:
+        if height < 0: #надо спуститься вниз y_direction= 25 
             cur_direction = y_neg_direction
-        elif height > 0:
+        elif height > 0: #надо подняться наверх y_direction = -25
             cur_direction = y_direction
         else:...
         distance = abs(height)
     elif abs(length) > abs(height):
         if length < 0:
-            cur_direction = x_direction
+            cur_direction = x_direction #надо догнать справа x_direction = 25
         elif length > 0:
-            cur_direction = x_neg_direction
+            cur_direction = x_neg_direction #надо догнать слева x_direction = -25
         else:...
         distance = abs(length)
     else:
